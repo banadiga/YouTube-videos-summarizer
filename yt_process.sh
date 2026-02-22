@@ -148,7 +148,7 @@ sanitize() {
   printf '%s' "$s"
 }
 
-truncate_bytes() { printf '%s' "$1" | head -c 50; }
+truncate_bytes() { printf '%s' "$1" | head -c 110; }
 
 #######################################
 # Input Detection (ignore yt-dlp errors)
@@ -229,6 +229,7 @@ process_video() {
   local folder
   local dir
   local out
+  local url_file
   local url
   local tmp_body
   local http_code
@@ -243,8 +244,10 @@ process_video() {
   folder="${vid}-${safe_title}"
   dir="${WORKSPACE}/${channel}/${folder}"
   out="${dir}/response.json"
+  url_file="${dir}/video.url"
 
   mkdir -p "$dir"
+  printf 'https://youtu.be/%s\n' "$vid" > "$url_file"
 
   if [ "$FORCE" != "1" ] && [ -s "$out" ]; then
     log "SKIP  $vid"
